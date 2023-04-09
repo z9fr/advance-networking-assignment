@@ -7,7 +7,7 @@ if (php_sapi_name() === 'cli-server' && is_file($filename)) {
 }
 
 require __DIR__ . '/vendor/autoload.php';
-include './repositories/product.php';
+include './repositories/customers.php';
 
 
 $router = new \Bramus\Router\Router();
@@ -15,7 +15,7 @@ $router = new \Bramus\Router\Router();
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$productRepo = new ProductRepository();
+$customerRepo = new CustomersRepository();
 
 
 $router->set404('(/.*)?', function() {
@@ -27,52 +27,50 @@ $router->set404('(/.*)?', function() {
     $jsonArray['status_text'] = "Not found";
 
     echo json_encode($jsonArray);
-
 });
 
-$router->get('/', function () use ($productRepo) {
-    $products = $productRepo->read();
+
+$router->get('/', function () use ($customerRepo) {
+    $products = $customerRepo->read();
     header('Content-Type: application/json');
     echo json_encode($products);
 });
 
-$router->get('(\d+)', function ($id) use ($productRepo) {
-    $product = $productRepo->read($id);
+$router->get('(\d+)', function ($id) use ($customerRepo) {
+    $product = $customerRepo->read($id);
     header('Content-Type: application/json');
     echo json_encode($product);
 });
 
-$router->post('/', function () use ($productRepo) {
+$router->post('/', function () use ($customerRepo) {
     $data = json_decode(file_get_contents('php://input'), true);
     $newProduct = [
-        'title' => $data['title'],
+        'name' => $data['name'],
         'body' => $data['body'],
-        'url' => $data['url'],
-        'price' => $data['price']
+        'profileImageUrl' => $data['profileImageUrl'],
     ];
 
-    $id = $productRepo->create($newProduct);
+    $id = $customerRepo->create($newProduct);
     header('Content-Type: application/json');
     echo json_encode(['id' => $id]);
 });
 
 
-$router->put('(\d+)', function ($id) use ($productRepo) {
+$router->put('(\d+)', function ($id) use ($customerRepo) {
     $data = json_decode(file_get_contents('php://input'), true);
     $updatedProduct = [
-        'title' => $data['title'],
+        'name' => $data['name'],
         'body' => $data['body'],
-        'url' => $data['url'],
-        'price' => $data['price']
+        'profileImageUrl' => $data['profileImageUrl'],
     ];
 
-    $productRepo->update($id, $updatedProduct);
+    $customerRepo->update($id, $updatedProduct);
     header('Content-Type: application/json');
     echo json_encode(['message' => 'Product updated successfully']);
 });
 
-$router->delete('(\d+)', function ($id) use ($productRepo) {
-    $productRepo->delete($id);
+$router->delete('(\d+)', function ($id) use ($customerRepo) {
+    $customerRepo->delete($id);
     header('Content-Type: application/json');
     echo json_encode(['message' => 'Product deleted successfully']);
 });
