@@ -9,12 +9,6 @@ if (php_sapi_name() === 'cli-server' && is_file($filename)) {
 require __DIR__ . '/vendor/autoload.php';
 include './repositories/customers.php';
 
-
-$router = new \Bramus\Router\Router();
-
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
 $customerRepo = new CustomersRepository();
 
 

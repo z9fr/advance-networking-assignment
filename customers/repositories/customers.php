@@ -4,10 +4,10 @@ class CustomersRepository {
   private $conn;
 
   public function __construct() {
-    $host = $_ENV["HOST"];
-    $username = $_ENV["USERNAME"];
-    $password = $_ENV["PASSWORD"];
-    $database = $_ENV["DATABASE"];
+    $host = getenv("DB_HOST");
+    $username = getenv("DB_USERNAME");
+    $password = getenv("DB_PASSWORD");
+    $database = getenv("DATABASE");
 
     $this->conn = new mysqli();
     $this->conn->real_connect($host, $username, $password, $database);

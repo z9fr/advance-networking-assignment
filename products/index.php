@@ -11,10 +11,6 @@ include './repositories/product.php';
 
 
 $router = new \Bramus\Router\Router();
-
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
 $productRepo = new ProductRepository();
 
 

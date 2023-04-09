@@ -11,12 +11,7 @@ include './repositories/orders.php';
 
 
 $router = new \Bramus\Router\Router();
-
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
 $orderRepo = new orderRepository();
-
 
 $router->set404('(/.*)?', function() {
     header('HTTP/1.1 404 Not Found');
