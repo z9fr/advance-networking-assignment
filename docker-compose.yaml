@@ -1,0 +1,67 @@
+version: "3.3"
+
+services:
+  db:
+    container_name: "db"
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    networks:
+      - fullstack
+
+  customers:
+    build: ./customers/
+    container_name: advancenetworking-customers
+    environment:
+      HOST: "db"
+      USERNAME: "root"
+      PASSWORD: "password"
+      DATABASE: "app_db"
+    depends_on:
+      - db
+    networks:
+      - fullstack
+
+  orders:
+    build: ./orders/
+    container_name: advancenetworking-orders
+    environment:
+      HOST: "db"
+      USERNAME: "root"
+      PASSWORD: "password"
+      DATABASE: "app_db"
+    depends_on:
+      - db
+    networks:
+      - fullstack
+
+  products:
+    build: ./products/
+    container_name: advancenetworking-products
+    environment:
+      HOST: "db"
+      USERNAME: "root"
+      PASSWORD: "password"
+      DATABASE: "app_db"
+    depends_on:
+      - db
+    networks:
+      - fullstack
+
+  nginx:
+    build: ./nginx/
+    container_name: advancenetworking-nginx
+    ports:
+      - "3000:80"
+    depends_on:
+      - customers
+      - orders
+      - products
+    networks:
+      - fullstack
+
+networks:
+  fullstack:
+    driver: bridge

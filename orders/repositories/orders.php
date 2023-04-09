@@ -10,7 +10,6 @@ class OrderRepository {
     $database = $_ENV["DATABASE"];
 
     $this->conn = new mysqli();
-    $this->conn->ssl_set(NULL, NULL, "/etc/ssl/cert.pem", NULL, NULL);
     $this->conn->real_connect($host, $username, $password, $database);
 
     if ($this->conn->connect_error) {
