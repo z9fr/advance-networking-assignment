@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>DASH.js Player</title>
+    <link rel="stylesheet" href="/dashjs/styles.css" />
+    <script src="/dashjs/dash.all.min.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="container">
+      <video
+        data-dashjs-player
+        autoplay
+        src="http://{IP_ADDR}/dashjs/manifest.mpd"
+        controls
+      ></video>
+      <div id="statistics"></div>
+    </div>
+    <script>
+      (function () {
+        const url = `http://{IP_ADDR}/dashjs/manifest.mpd`;
+        const video = document.querySelector("video");
+        const player = dashjs.MediaPlayer().create();
+        player.initialize(video, url, true);
+
+        const statsElement = document.getElementById("statistics");
+
+        const updateStatistics = () =>{
+          const bitrate = player.getAverageThroughput("video");
+          const droppedFrames =
+            player.getVideoElement().webkitDroppedFrameCount || 0;
+
+          statsElement.innerHTML = `
+          <p>Average Bitrate: ${bitrate.toFixed(2)} kbps</p>
+          <p>Dropped Frames: ${droppedFrames}</p>
+        `;
+
+          setTimeout(updateStatistics, 1000);
+        }
+
+     
+        updateStatistics();
+      })();
+    </script>
+  </body>
+</html>
